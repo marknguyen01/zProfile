@@ -1,6 +1,65 @@
 body {
     background-color: #F1F1F1;
     font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    font-size: 12px;
+}
+
+.pun {
+    background: #fff !important;
+}
+
+#new-message, #profile-head .stats-field {
+    position: absolute;
+    bottom: 0px;
+}
+
+#profile-head .stats-field {
+    right: 10px;
+}
+
+#profile-head .stats-field ul {
+    list-style: none;
+}
+
+#profile-head .stats-field li, #profile-head .stats-field legend, #profile-head .stats-field li:nth-child(2) label, #profile-head .stats-field li:nth-child(3) label {
+    display: none;
+}
+
+#profile-head .stats-field li:nth-child(2), #profile-head .stats-field li:nth-child(3) {
+    display: block;
+    float: left;
+    border-radius: 50%;
+    color: #F0F0F0;
+    margin: 20px;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+}
+
+#profile-head .stats-field li:nth-child(2) {
+    background: #03436A;
+}
+
+#profile-head .stats-field li:nth-child(3) {
+    background: #8F4817;
+}
+
+#tabs ul {
+    list-style-position: outside;
+    list-style-type: none;
+    padding: 0 1.8em;
+    white-space: nowrap;
+}
+
+#tabs ul li {
+    float: left;
+    margin: 0;
+    padding: 0 4px 0 0;
+}
+
+#tabs ul li a {
+    float: left;
 }
 
 #tabs li a,.main-head,#pun-intro {
@@ -8,27 +67,32 @@ body {
     border: 0!important;
 }
 
-#tabs li a,.main-head,#pun-intro,#profile-advanced-add a {
-    font: 15px/20px'Open Sans Condensed',sans-serif;
+#tabs li a,.main-head,#profile-advanced-add a {
+    font: 1.1em'Open Sans Condensed',sans-serif;
     color: #F0F0F0!important;
     text-align: center;
     font-weight: bold!important;
+    text-decoration: none;
+    line-height: 2em;
 }
 
-.main-content {
-    padding: 4px !important;
-    background-color: #FBFBFB !important;
-    border: 1px solid #DDDDDD !important;
+#tabs li.activetab a {
+    text-decoration: underline;
 }
 
-#pun-intro a,#pun-head a {
+#pun-intro a,#profile-cover a {
     color: #F0F0F0!important;
     text-decoration: none;
 }
 
+.main-head {
+    padding: .7em 1.3em;
+}
+
 #profile-advanced-details textarea {
-    resize: none;
+    resize: vertical;
     height: 90px;
+    width: calc(100% - 5px);
 }
 
 #tabs li a {
@@ -37,37 +101,29 @@ body {
     background: url("http://2.bp.blogspot.com/-IfiIwt0iR5c/UL4zzUjtGyI/AAAAAAAABho/rlYYH1q2iCY/s1600/sec-sep.gif")no-repeat scroll left top transparent;
 }
 
-#tabs {
-    top: -32px;
-}
-
 .pun {
     background-color: #FAFAFA;
     width: auto;
-    padding: 30px;
+    padding: 0 !important;
 }
 
-#pun-intro {
-    padding: 5px;
-    display: inline;
-    border-bottom-right-radius: 4px;
-    left: 0px;
-    position: absolute;
-    top: 0px;
+#profile-head {
+    margin-bottom: 90px;
+    position: relative;
 }
 
-#pun-head {
+#profile-cover {
     background-color: #227264;
-    margin: 45px 0;
-    padding: 10px;
+    padding: 125px 10px;
 }
 
-#profile-advanced-details {
-    margin-top: 80px;
+#profile-body {
+    padding: 0 30px;
 }
 
 #profile-advanced-right {
-    margin-top: 100px;
+    float: right;
+    width: 302px;
 }
 
 #a:link,#profile-advanced-right.module.main a:link {
@@ -78,6 +134,12 @@ body {
 
 #profile-advanced-details a:hover,#profile-advanced-right.module.main a:hover {
     color: #8F8F8F!important;
+}
+
+#profile-advanced-details .main-content, #profile-advanced-right .main-content {
+    background-color: #fbfbfb;
+    border: 1px solid #ddd;
+    padding: 10px;
 }
 
 .field_uneditable {
@@ -120,6 +182,7 @@ body {
 
 #wall-reply {
     margin-bottom: 10px;
+    padding: 5px;
 }
 
 #wall-reply div input[name="subject"] {
@@ -154,4 +217,61 @@ body {
     width: 100%;
     background-color: #F4F4F4;
     border: 1px#ddd solid;
+}
+
+#profile-advanced-left {
+    margin: 0!important;
+}
+
+#profile-advanced-layout {
+    margin: 0!important;
+    width: calc(100% - 310px);
+    float: left;
+}
+
+.invisible {
+    display: none;
+    visibility: hidden;
+}
+
+#profile-advanced-details dl dd {
+    margin-left: 10em;
+    padding-left: 12px;
+}
+
+.ajax-profil_parent {
+    position: relative;
+    zoom: 1;
+}
+
+#profile-advanced-details dl {
+    margin: 10px 0 0;
+    padding: 8px 10px 8px 0;
+    width: 98%;
+}
+
+.middleline {
+    line-height: 2em;
+}
+
+#profile-advanced-details dl dt {
+    display: block;
+    float: left;
+    width: 10em;
+}
+
+#profile-advanced-details div.separator {
+    border-bottom: 1px solid #dcdcdc;
+    clear: both;
+    font-size: 1px;
+    line-height: 1px;
+    padding-top: 10px;
+}
+
+#profile-advanced-details .ajax-profil_edit {
+    left: -4px;
+    cursor: pointer;
+    left: -12px;
+    position: absolute;
+    top: 6px;
 }
