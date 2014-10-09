@@ -7,69 +7,73 @@
             cssDefault: 0,
             version: 0,
         }, options);
-        var variables = {
-            user_id: 0,
-            user_name: 0,
-            profile_id: 0,
-            profile_name: 0,
-            profile_rank: 0,
-            profile_img: 0,
-            profile_rep: 0,
-            profile_thanks: 0,
-            profile_thanks_given: 0,
-            profile_p_votes: 0,
-            profile_n_vote: 0,
-            profile_p_votes_given: 0,
-            profile_n_votes_given: 0,
+        var profile = {
+            '{USER_ID}': 0,
+            '{USER_NAME}': 0,
+            '{PROFILE_ID}': 0,
+            '{PROFILE_NAME}': 0,
+            '{PROFILE_RANK}': 0,
+            '{PROFILE_IMG}': 0,
         };
+        var profile_rep = {
+            rep: 0,
+            thanks: 0,
+            thanks_given: 0,
+            p_votes: 0,
+            n_votes: 0,
+            p_votes_given: 0,
+            n_vote_given: 0,
+        };
+        var profile_holder = [], rep_holder = [];
         init = function() {
             if (document.getElementById('tabs') && location.pathname.substring(0, 2) == '/u') {
-                this.prepare();
-                document.getElementById('profile-advanced-layout').insertAdjacentHTML('beforeend', '<div id="copyright"><b>zProfile by Zero</b></div>');
-
-            }
-            this.checkLocation('', function() {
-                    updateUI($('#field_id' + settings.cssID + ' .field_uneditable').text(), $('#field_id' + settings.htmlID + ' .field_uneditable').text());
-                    $('#profile_field_2_' + settings.cssID).after('<a style="cursor:pointer" onclick="zprofile.back()">Default</a>');
-                },
-                function() {
-                    $.get('/u' + location.pathname.match(/[0-9]/), function(data) {
-                        css = $(data).find('#field_id' + settings.cssID + ' .field_uneditable').text();
-                        html = $(data).find('#field_id' + settings.htmlID + ' .field_uneditable').text();
-                        updateUI(css, html);
+                $('script').detach();
+                this.prepare(function() {
+                    this.checkLocation('', function() {
+                            update($('#field_id' + settings.cssID + ' .field_uneditable').text(), $('#field_id' + settings.htmlID + ' .field_uneditable').text());
+                            $('#profile_field_2_' + settings.cssID).after('<a style="cursor:pointer" onclick="zprofile.back()">Default</a>');
+                        },
+                        function() {
+                            $.get('/u' + location.pathname.match(/[0-9]/), function(data) {
+                                css = $(data).find('#field_id' + settings.cssID + ' .field_uneditable').text();
+                                html = $(data).find('#field_id' + settings.htmlID + ' .field_uneditable').text();
+                                update(css, html);
+                            });
+                        });
+                    this.checkLocation('wall', function() {
+                        this.zeditor.editor();
                     });
                 });
-            this.checkLocation('stats', function() {
-                reputation('#profile-advanced-details');
-            }, function() {
-                $.get('/u' + location.pathname.match(/[0-9]/) + 'stats', function(data) {
-                    reputation(data);
-                });
-            });
-            this.checkLocation('wall', function() {
-                this.zeditor.editor();
-            });
-            $('script').detach();
+            }
+
         };
-        prepare = function() {
-            uname = _userdata['username'];
-            uid = _userdata['user_id'];
-            if (settings.guest && document.getElementById('logout') == null) {
-                document.body.style.display = 'none';
-                alert('Please login to use this feature');
-                location.href = 'http://' + location.host;
-            }
-            if (document.getElementById('logout')) {
-                $('#profile-advanced-right .module.main').has('noscript').remove();
-                $('#main-content div').first().remove();
-            }
-            if (uname != $('#profile-advanced-right .h3 span').first().text()) {
+        prepare = function(finished) {
+            profile['{USER_NAME}'] = _userdata['username'];
+            profile['{USER_ID}'] = _userdata['user_id'];
+            profile['{PROFILE_NAME}'] = $('#profile-advanced-right .h3 span').first().text();
+            profile['{PROFILE_ID}'] = location.pathname.match(/[0-9]/).toString();
+            profile['{PROFILE_RANK}'] = $('#profile-advanced-right .main-content').first().text();
+            profile['{PROFILE_IMG}'] = $('#profile-advanced-right .main-content img')[0].outerHTML;
+            if (profile['{user_name}'] != profile['{profile_name}']) {
                 $('#field_id' + settings.htmlID + ', #field_id' + settings.cssID).hide().next().hide();
             }
+            this.checkLocation('stats', function() {
+                setReputation('#profile-advanced-details');
+                finished();
+            }, function() {
+                $.get('/u' + location.pathname.match(/[0-9]/) + 'stats', function(data) {
+                    setReputation(data);
+                    finished();
+                });
+            });
+
         };
-        updateUI = function(css, html) {
+        update = function(css, html) {
             $('head').append('<style>' + css + '</style>');
-            $('#profile-advanced-layout').before(html);
+            for (var a in profile) {
+                profile_holder.push(profile[a]);
+            }
+            $('#profile-advanced-layout').before(replaceArray(html, Object.keys(profile), profile_holder));
         };
         checkLocation = function(mode, succ, fail) {
             if (typeof(succ) === 'function' && location.pathname.replace('/u', '').replace(/[0-9]/g, '') == mode) {
@@ -79,14 +83,19 @@
                 fail();
             }
         };
-
-        tabs = function(name, href) {
-
-        };
         loading = function(where, b) {
             a = document.getElementById('profile-loading');
             $('<div id="profile-loading" class="main-content" style="opacity: 1"><img src="http://i11.servimg.com/u/f11/16/80/27/29/ajax-l10.gif" /><br/>Loading...</div>').appendTo(where);
             if (a) b == 'hide' ? a.style.opacity = '0' : a.style.opacity = '1';
+        };
+        replaceArray = function(content, find, replace) {
+            var replaceString = content;
+            var regex;
+            for (var i = 0; i < find.length; i++) {
+                regex = new RegExp(find[i], "g");
+                replaceString = replaceString.replace(regex, replace[i]);
+            }
+            return replaceString;
         };
         zeditor = {
             editor: function() {
@@ -118,7 +127,7 @@
 
                     });
                 } else {
-                    alert('Vui lòng điền nội dung cho tin nhắn')
+                    alert('Please enter the message')
                 }
             },
             preview: function() {
@@ -128,12 +137,12 @@
                 });
             },
         };
-        reputation = function(dom) {
-            $(dom).find('.stats-field:eq(0)')
+        setReputation = function(dom) {
+            $(dom).find('.stats-field:eq(0) li').each(function(a) {
+                profile_rep[a] = $(this).text().match(/[0-9]/);
+            })
         };
         init();
-        tabs();
-        console.log(variables.profile_name);
     }
 }(jQuery));
 $(function() {
