@@ -1,0 +1,57 @@
+<div id="zprofile">
+    <div id="profile-head">
+        <div id="profile-cover"><font color="white"><center><b>Welcome <a href="/u{USER_ID}">{USER_NAME}</a> to my profile</b><br><br>Thank you for using zProfile <br>Developed by Zero and released under <a href="https://tldrlegal.com/license/mit-license">the MIT license</a><br>Visit my <a href="https://github.com/mysticzero/zProfile">project page</a> or <a href="http://devs.forumvi.com/t119-tuts-zprofile-11">official thread</a> for more information</center></font>
+
+        </div>
+        <div id="profile-rep">
+            <div>{PROFILE_P_VOTES}</div>
+            <div>{PROFILE_N_VOTES}</div>
+        </div>
+        <!-- {PROFILE_REP} {PROFILE_THANKS} {PROFILE_P_VOTES_GIVEN} {PROFILE_N_VOTES_GIVEN} {PROFILE_THANKS_GIVEN} -->
+    </div>
+    <div id="profile-body" class="clearfix">
+        <div id="profile-left">
+            <div id="tabs" class="clearfix">
+                <ul>
+                    <li><a href="/u{PROFILE_ID}wall"><span>Visitor messages</span></a>
+
+                    </li>
+                    <li><a href="/u{PROFILE_ID}"><span>Lý lịch</span></a>
+
+                    </li>
+                    <li><a href="/u{PROFILE_ID}stats"><span>Statistics</span></a>
+
+                    </li>
+                    <li><a href="/u{PROFILE_ID}friends"><span>Friends</span></a>
+
+                    </li>
+                    <li><a href="/u{PROFILE_ID}contact"><span>Contact</span></a>
+
+                    </li>
+                </ul>
+            </div>
+            <div id="profile-left-body">{PROFILE_BODY}</div>
+        </div>
+        <div id="profile-right">
+            <div id="profile-add" class="clearfix"> <a href="/profile?friend={PROFILE_NAME}&mode=editprofile&page_profil=friendsfoes">+ Friend</a>
+ <a href="/profile?foe={PROFILE_NAME}&mode=editprofile&page_profil=friendsfoes">- Foe</a>
+
+            </div>
+            <div class="module main" style="margin-bottom:4px !important;">
+                <div class="main-head">
+                    <div class="h3"><strong>{PROFILE_NAME}</strong>
+
+                    </div>
+                </div>
+                <div class="main-content clearfix center">{PROFILE_IMG} {PROFILE_RANK}</div>
+            </div>
+            <div class="module main" style="margin-bottom:4px !important;">
+                <div class="main-head">
+                    <div class="h3"><strong>{PROFILE_NAME}</strong> friends</div>
+                </div>
+                <div class="main-content clearfix" style="padding:0.3em;text-align:center;">
+                    <div class="clear"></div>{PROFILE_NAME} has no friends yet</div>
+            </div>
+        </div>
+    </div>
+</div>
