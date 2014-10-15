@@ -43,10 +43,7 @@ display :none !important
     background: #312A1E;
 }
 #profile-tab ul {
-    list-style-position: outside;
-    list-style-type: none;
-    padding: 0 1.8em;
-    white-space: nowrap;
+    list-style: none;
 }
 #profile-tab ul li {
     float: left;
@@ -88,7 +85,8 @@ display :none !important
 #profile-left-body textarea {
     resize: vertical;
     min-height: 90px;
-    width: calc(100% - 5px);
+    width: calc(100% - 2px);
+    border: 1px solid #E9EAED;
 }
 #profile-head {
     margin-bottom: 90px;
@@ -158,37 +156,73 @@ display :none !important
     text-align: center;
     width: 80px;
 }
-#wall-reply {
-    margin-bottom: 10px;
+#profile-reply {
+    margin-bottom: 10px
+}
+#profile-reply div input[name="subject"] {
+    float: right;
+    width: 350px;
+    border: 1px solid #E9EAED;
     padding: 5px;
 }
-#wall-reply div input[name="subject"] {
-    float: right;
-    width: 350px;
-}
-#wall-reply div input[name="preview"], #wall-reply div input[name="post"] {
-    background-color: #F4F4F4;
-    border: 1px solid#DDDDDD;
+#profile-reply div input[name="preview"], #profile-reply div input[name="post"] {
+    background-color: #fff;
+    border: 1px solid #E9EAED;
     cursor: pointer;
-    margin-left: 6px;
+    padding: 5px;
+    margin-right: 10px;
 }
-#wall-reply div input[name="subject"] {
-    float: right;
-    width: 350px;
-}
-#wall-reply div input[name="preview"]:hover, #wall-reply div input[name="post"]:hover {
+#profile-reply div input[name="preview"]:hover, #profile-reply div input[name="post"]:hover {
     box-shadow: inset 1px 1px 0 0 rgba(0, 0, 0, 0.25);
 }
-#outter-wall {
+#profile-reply-input {
+    margin-top: 5px
+}
+#profile-reply-outer {
     position: relative;
     margin-bottom: 8px;
 }
-#wall-preview {
+#profile-reply-preview {
     position: absolute;
     height: 100%;
     width: 100%;
     background-color: #F4F4F4;
-    border: 1px#ddd solid;
+    border: 1px #ddd solid;
+}
+#profile-left-body ul, #profile-left-body ol {
+    list-style: none
+}
+#profile-left-body li.clearfix {
+    margin-bottom: 5px
+}
+#profile-left-body .avatar {
+    float: left;
+    border: 1px solid #E9EAED;
+    padding: 3px;
+}
+#profile-left-body .avatar img {
+    max-width: 100%;
+}
+#profile-left-body .message-block {
+    padding: 5px;
+    background: #fff;
+    float: left;
+    border: 1px solid #E9EAED;
+    width: calc(100% - 80px);
+    margin-left: 10px;
+}
+#profile-left-body .message-date {
+    display: inline
+}
+#profile-left-body .message-footer {
+    float: right;
+}
+#profile-left-body .message-footer li {
+    float: right;
+    margin-right: 5px;
+}
+#profile-left-body div.pagination:first-child {
+    display: none
 }
 #profile-left dl dd {
     margin-left: 10em;

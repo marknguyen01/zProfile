@@ -5,7 +5,6 @@
             cssID: 0,
             tag: ['<script>', '<html>', '<iframe>', '<body>', '<head>'],
             cssDefault: 0,
-            version: 0,
         }, options);
         var profile = {
             '{USER_ID}': 0,
@@ -14,6 +13,7 @@
             '{PROFILE_NAME}': 0,
             '{PROFILE_RANK}': 0,
             '{PROFILE_IMG}': 0,
+            '{TAB_ACTIVE}': 'profile-tab',
         };
         var profile_rep = {
             '{PROFILE_REP}': 0,
@@ -54,8 +54,11 @@
             profile['{PROFILE_ID}'] = location.pathname.match(/[0-9]/).toString();
             profile['{PROFILE_RANK}'] = $('#profile-advanced-right .main-content').first().text();
             profile['{PROFILE_IMG}'] = $('#profile-advanced-right .main-content img')[0].outerHTML;
-            if (profile['{user_name}'] != profile['{profile_name}']) {
-                $('#field_id' + settings.htmlID + ', #field_id' + settings.cssID).hide().next().hide();
+            // if (profile['{USER_NAME}'] != profile['{PROFILE_NAME}']) {
+            //    $('#field_id' + settings.htmlID + ', #field_id' + settings.cssID).hide().next().hide();
+            // }
+            for (var a in profile) {
+                holder.push(profile[a]);
             }
             this.checkLocation('stats', function() {
                 setReputation('#profile-advanced-details');
@@ -70,17 +73,23 @@
         };
         update = function(css, html) {
             $('head').append('<style>' + css + '</style>');
-            for (var a in profile) {
-                holder.push(profile[a]);
-            }
-            html = replaceArray(html, Object.keys(profile_rep).concat(Object.keys(profile)), holder);
+            html = replaceArray(html, Object.keys(profile).concat(Object.keys(profile_rep)), holder);
             html = html.replace('{PROFILE_BODY}', function() {
                 return $('#profile-advanced-details > .main-content').html();
                 $('#profile-advanced-details').remove();
             });
             console.log('Done. Thanks for using zProfile. Find me on github @ mysticzero');
             document.getElementById('profile-advanced-layout').insertAdjacentHTML('beforebegin', html);
-            $('#profile-tab li a[href="' + location.pathname + '"]').parent().addClass('activetab');
+            $('div[rel="profile-tab"] a[href="' + location.pathname + '"]').parent().addClass('activetab');
+            $('#profile_field_2_3').keyup(function() {
+                for (var i in settings.tag) {
+                    regex = new RegExp(settings.tag[i], 'i');
+                    if (regex.test(this.value)) {
+                        alert('No ' + settings.tag[i] + ' allowed');
+                        this.value = this.value.replace(regex, '');
+                    }
+                }
+            });
             if (location.pathname.replace('/u', '').replace(/[0-9]/g, '') == '' && (profile['{USER_NAME}'] == profile['{PROFILE_NAME}'] || $('a[href^="/admin/index.forum?mode=edit"]').length > 0)) {
                 $('<dt>Edit</dt>').appendTo($('#profile-left-body dl:has(".field_editable")')).toggle(function() {
                         var x = $(this).parent();
@@ -129,12 +138,12 @@
         zeditor = {
             editor: function() {
                 $.get('/privmsg?mode=post_profile&u=' + location.pathname.match(/\d+/), function(a) {
-                    document.getElementById('profile-advanced-details').getElementsByClassName('main-content')[0].insertAdjacentHTML('beforebegin', '<div id="wall-reply" class="main-content"><form action="/privmsg?mode=post_profile" name="post" method="post"><div id="outter-wall"><div id="wall-preview" style="display:none" ondblclick="this.style.display = \'none\'" title="Double click to close this window"></div><textarea id="text_editor_textarea" cols="9" rows="3" name="message" placeholder="Message: ' + $(a).find('.frm-set dd').text().replace(/N/gi, 'N |').replace(/F/gi, 'F |') + '"></textarea></div>' + $('<div/>').append($(a).find('.frm-buttons input[type="hidden"]').clone()).html() + '<div><input type="submit" accesskey="s" tabindex="6" value="Send" name="post"><input type="submit" value="Preview" name="preview"><input type="text" name="subject" id="subject" placeholder="Subject"></div></form></div>');
-                    document.forms['post']['post'].addEventListener('click', function(event) {
+                    document.getElementsByClassName('pagination')[0].insertAdjacentHTML('beforebegin', '<div id="profile-reply"><form action="/privmsg?mode=post_profile" name="profile-reply" method="post"><div id="profile-reply-outer"><div id="profile-reply-preview" style="display:none" ondblclick="this.style.display = \'none\'" title="Double click to close this window"></div><textarea id="text_editor_textarea" cols="9" rows="3" name="message" placeholder="Message: ' + $(a).find('.frm-set dd').text().replace(/N/gi, 'N |').replace(/F/gi, 'F |') + '"></textarea></div><div id="profile-reply-input">' + $('<div/>').append($(a).find('.frm-buttons input[type="hidden"]').clone()).html() + '<input type="submit" accesskey="s" tabindex="6" value="Send" name="post"><input type="submit" value="Preview" name="preview"><input type="text" name="subject" id="subject" placeholder="Subject"></div></form></div>');
+                    document.forms['profile-reply']['post'].addEventListener('click', function(event) {
                         event.preventDefault();
                         zeditor.send();
                     });
-                    document.forms['post']['preview'].addEventListener('click', function(event) {
+                    document.forms['profile-reply']['preview'].addEventListener('click', function(event) {
                         event.preventDefault();
                         zeditor.preview();
                     });
@@ -161,8 +170,8 @@
             },
             preview: function() {
                 $.post('/privmsg?mode=post_profile', $('#wall-reply form[name="post"]').serialize() + '&preview=1', function(b) {
-                    $('#wall-preview').html($(b).find('.entry-content').html());
-                    document.getElementById('wall-preview').style.display = '';
+                    $('#profile-reply-preview').html($(b).find('.entry-content').html());
+                    document.getElementById('profile-reply-preview').style.display = '';
                 });
             },
         };
@@ -192,6 +201,5 @@ $(function() {
         htmlID: '3',
         cssID: '2',
         cssDefault: '/h7-',
-        version: 'punbb',
     });
 });
