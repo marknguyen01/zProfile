@@ -1,3 +1,4 @@
+/****** / Don't remove below / ******/ 
 .clearfix:after {
     clear: both;
     content:".";
@@ -5,8 +6,13 @@
     height: 0;
     visibility: hidden;
 }
+.ajax-profil_edit {
+display :none !important
+}
+
+/***** / Don't remove above / ******/
 #zprofile {
-    background-color: #b1c1c1;
+    background-color: #E9EAED;
     font-family:'lucida grande', tahoma, verdana, arial, sans-serif;
     font-size: 12px;
 }
@@ -24,32 +30,42 @@
     height: 50px;
     text-align: center;
     line-height: 50px;
+    font-weight: bold;
+    border: 2px #312A1E solid
 }
 #profile-rep div:nth-child(1) {
-    background: #03436A;
+    background: #0D577E;
 }
 #profile-rep div:nth-child(2) {
-    background: #8F4817;
+    background: #7F4D45;
 }
-#tabs ul {
+#profile-tab {
+    background: #312A1E;
+}
+#profile-tab ul {
     list-style-position: outside;
     list-style-type: none;
     padding: 0 1.8em;
     white-space: nowrap;
 }
-#tabs ul li {
+#profile-tab ul li {
     float: left;
+    position: relative;
     margin: 0;
     padding: 0 4px 0 0;
+    width: 15%;
 }
-#tabs ul li a {
+#profile-tab ul li a {
     float: left;
+    border-right: 1px #0D101A solid !important;
+    border-width: 0 1px 0 0;
+    padding: 10px!important;
+    width: calc(100% - 20px);
 }
-#tabs li a, .main-head, #pun-intro {
+#profile-tab li a, .main-head {
     background-color: #312A1E!important;
-    border: 0!important;
 }
-#tabs li a, .main-head, #profile-advanced-add a {
+#profile-tab li a, .main-head, #profile-advanced-add a {
     font: 1.1em'Open Sans Condensed', sans-serif;
     color: #F0F0F0!important;
     text-align: center;
@@ -57,38 +73,36 @@
     text-decoration: none;
     line-height: 2em;
 }
-#tabs li.activetab a {
-    text-decoration: underline;
-}
-#pun-intro a, #profile-cover a {
-    color: #F0F0F0!important;
-    text-decoration: none;
+#profile-tab li.activetab:before {
+    position: absolute;
+    bottom: 0;
+    left: calc(50% - 10px);
+    border-left: 10px solid transparent;
+    border-bottom: 10px solid #E9EAED;
+    border-right: 10px solid transparent;
+    content: " "
 }
 .main-head {
     padding: .7em 1.3em;
 }
-#profile-advanced-details textarea {
+#profile-left-body textarea {
     resize: vertical;
-    height: 90px;
+    min-height: 90px;
     width: calc(100% - 5px);
-}
-#tabs li a {
-    padding: 10px!important;
-    margin-left: -4px;
-    background: url("http://2.bp.blogspot.com/-IfiIwt0iR5c/UL4zzUjtGyI/AAAAAAAABho/rlYYH1q2iCY/s1600/sec-sep.gif")no-repeat scroll left top transparent;
-}
-.pun {
-    background-color: #FAFAFA;
-    width: auto;
-    padding: 0 !important;
 }
 #profile-head {
     margin-bottom: 90px;
     position: relative;
 }
 #profile-cover {
-    background-color: #227264;
+    background-color: #2175A5;
     padding: 125px 10px;
+    color: #fff;
+    text-align: center;
+}
+#profile-cover a {
+    text-decoration: none;
+    color: #bbb!important  
 }
 #profile-body {
     padding: 0 30px;
@@ -102,15 +116,7 @@
     float: right;
     width: 302px;
 }
-#a:link, #profile-advanced-right.module.main a:link {
-    color: #626262!important;
-    text-decoration: none;
-    transition: color 0.2s ease-in-out 0s;
-}
-#profile-advanced-details a:hover, #profile-advanced-right.module.main a:hover {
-    color: #8F8F8F!important;
-}
-#profile-advanced-details .main-content, #profile-advanced-right .main-content {
+#profile-left-body, #profile-right .main-content {
     background-color: #fbfbfb;
     border: 1px solid #ddd;
     padding: 10px;
@@ -137,12 +143,12 @@
     font-weight: bold;
 }
 #profile-add a:first-child {
-    background-color: #459766;
+    background-color: #03436A;
     margin-bottom: 5px;
     margin-right: 5px
 }
 #profile-add a:last-child {
-    background-color: #FF5959;
+    background-color: #A52126;
 }
 #profile-loading {
     font-size: 16px;
@@ -184,19 +190,11 @@
     background-color: #F4F4F4;
     border: 1px#ddd solid;
 }
-.invisible {
-    display: none;
-    visibility: hidden;
-}
-#profile-advanced-details dl dd {
+#profile-left dl dd {
     margin-left: 10em;
     padding-left: 12px;
 }
-.ajax-profil_parent {
-    position: relative;
-    zoom: 1;
-}
-#profile-advanced-details dl {
+#profile-left dl {
     margin: 10px 0 0;
     padding: 8px 10px 8px 0;
     width: 98%;
@@ -204,22 +202,15 @@
 .middleline {
     line-height: 2em;
 }
-#profile-advanced-details dl dt {
+#profile-left dl dt {
     display: block;
     float: left;
     width: 10em;
 }
-#profile-advanced-details div.separator {
+#profile-left div.separator {
     border-bottom: 1px solid #dcdcdc;
     clear: both;
     font-size: 1px;
     line-height: 1px;
     padding-top: 10px;
-}
-#profile-advanced-details .ajax-profil_edit {
-    left: -4px;
-    cursor: pointer;
-    left: -12px;
-    position: absolute;
-    top: 6px;
 }

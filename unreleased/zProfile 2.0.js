@@ -16,15 +16,15 @@
             '{PROFILE_IMG}': 0,
         };
         var profile_rep = {
-            rep: 0,
-            thanks: 0,
-            thanks_given: 0,
-            p_votes: 0,
-            n_votes: 0,
-            p_votes_given: 0,
-            n_vote_given: 0,
+            '{PROFILE_REP}': 0,
+            '{PROFILE_THANKS}': 0,
+            '{PROFILE_THANKS_GIVEN}': 0,
+            '{PROFILE_P_VOTES}': 0,
+            '{PROFILE_N_VOTES}': 0,
+            '{PROFILE_P_VOTES_GIVEN}': 0,
+            '{PROFILE_N_VOTES_GIVEN}': 0,
         };
-        var profile_holder = [], rep_holder = [];
+        var holder = [];
         init = function() {
             if (document.getElementById('tabs') && location.pathname.substring(0, 2) == '/u') {
                 $('script').detach();
@@ -49,8 +49,8 @@
         };
         prepare = function(finished) {
             profile['{USER_NAME}'] = _userdata['username'];
-            profile['{USER_ID}'] = _userdata['user_id'];
-            profile['{PROFILE_NAME}'] = $('#profile-advanced-right .h3 span').first().text();
+            profile['{USER_ID}'] = _userdata['user_id'].toString();
+            profile['{PROFILE_NAME}'] = $('#profile-advanced-right .h3').eq(1).text().replace(' friends', '');
             profile['{PROFILE_ID}'] = location.pathname.match(/[0-9]/).toString();
             profile['{PROFILE_RANK}'] = $('#profile-advanced-right .main-content').first().text();
             profile['{PROFILE_IMG}'] = $('#profile-advanced-right .main-content img')[0].outerHTML;
@@ -71,9 +71,38 @@
         update = function(css, html) {
             $('head').append('<style>' + css + '</style>');
             for (var a in profile) {
-                profile_holder.push(profile[a]);
+                holder.push(profile[a]);
             }
-            $('#profile-advanced-layout').before(replaceArray(html, Object.keys(profile), profile_holder));
+            html = replaceArray(html, Object.keys(profile_rep).concat(Object.keys(profile)), holder);
+            html = html.replace('{PROFILE_BODY}', function() {
+                return $('#profile-advanced-details > .main-content').html();
+                $('#profile-advanced-details').remove();
+            });
+            console.log('Done. Thanks for using zProfile. Find me on github @ mysticzero');
+            document.getElementById('profile-advanced-layout').insertAdjacentHTML('beforebegin', html);
+            $('#profile-tab li a[href="' + location.pathname + '"]').parent().addClass('activetab');
+            if (location.pathname.replace('/u', '').replace(/[0-9]/g, '') == '' && (profile['{USER_NAME}'] == profile['{PROFILE_NAME}'] || $('a[href^="/admin/index.forum?mode=edit"]').length > 0)) {
+                $('<dt>Edit</dt>').appendTo($('#profile-left-body dl:has(".field_editable")')).toggle(function() {
+                        var x = $(this).parent();
+                        $(this).text('Save');
+                        $(x).find('.field_editable').removeClass('invisible');
+                        $(x).find('.field_uneditable').addClass('invisible');
+                    },
+                    function() {
+                        var x = $(this).parent();
+                        $(this).text('Edit');
+                        $(x).find('.field_editable').addClass('invisible');
+                        $(x).find('.field_uneditable').removeClass('invisible');
+                        var content = new Array();
+                        $(x).find('[name]').each(function() {
+                            var type_special = $(this).is('input[type=radio],input[type=checkbox]');
+                            if ((type_special && $(this).is(':checked')) || !type_special) {
+                                content.push(new Array($(this).attr('name'), $(this).attr('value')));
+                            }
+                        });
+                        ajax($(x).attr('id').substring(8, $(x).attr('id').length), profile['{PROFILE_ID}'], content);
+                    });
+            }
         };
         checkLocation = function(mode, succ, fail) {
             if (typeof(succ) === 'function' && location.pathname.replace('/u', '').replace(/[0-9]/g, '') == mode) {
@@ -139,8 +168,21 @@
         };
         setReputation = function(dom) {
             $(dom).find('.stats-field:eq(0) li').each(function(a) {
-                profile_rep[a] = $(this).text().match(/[0-9]/);
+                profile_rep[Object.keys(profile_rep)[a]] = $(this).text().match(/[0-9]/).toString();
+                holder.push(profile_rep[Object.keys(profile_rep)[a]]);
             })
+        };
+        ajax = function(field_id, user_id, content) {
+            var x = document.getElementById('logout').getAttribute('href').split(/&tid=|&key=/g)[1];
+            $.post("/ajax_profile.forum?jsoncallback=?", {
+                id: field_id,
+                user: user_id,
+                active: "1",
+                content: $.toJSON(content),
+                tid: x,
+            }, function(data) {
+                $('#field_id' + field_id + ' .field_uneditable').html(data[field_id]);
+            }, "json");
         };
         init();
     }
