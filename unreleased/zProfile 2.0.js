@@ -41,7 +41,9 @@
                             });
                         });
                     this.checkLocation('wall', function() {
-                        this.zeditor.editor();
+                        if (_userdata['user_id'] != -1) {
+                            this.zeditor.editor();
+                        }
                     });
                 });
             }
@@ -72,16 +74,27 @@
 
         };
         update = function(css, html) {
-            $('head').append('<style>' + css + '</style>');
-            html = replaceArray(html, Object.keys(profile).concat(Object.keys(profile_rep)), holder);
-            html = html.replace('{PROFILE_BODY}', function() {
-                return $('#profile-advanced-details > .main-content').html();
-                $('#profile-advanced-details').remove();
-            });
-            console.log('Done. Thanks for using zProfile. Find me on github @ mysticzero');
-            document.getElementById('profile-advanced-layout').insertAdjacentHTML('beforebegin', html);
+            x = document.getElementById('zprofile');
+            if (x) {
+                x.parentNode.removeChild(x);
+            }
+            if (css != null) {
+                $('head').append('<style>' + css + '</style>');
+            }
+            if (html != null) {
+                html = replaceArray('<div id="zprofile">' + html + '</div>', Object.keys(profile).concat(Object.keys(profile_rep)), holder);
+                html = html.replace('{PROFILE_BODY}', function() {
+                    return $('#profile-advanced-details > .main-content').html();
+                    $('#profile-advanced-details').remove();
+                });
+                document.getElementById('profile-advanced-layout').insertAdjacentHTML('beforebegin', html);
+                this.setUp();
+
+            }
+        };
+        setUp = function() {
             $('div[rel="profile-tab"] a[href="' + location.pathname + '"]').parent().addClass('activetab');
-            $('#profile_field_2_3').keyup(function() {
+            $('#profile_field_2_' + settings.htmlID).keyup(function() {
                 for (var i in settings.tag) {
                     regex = new RegExp(settings.tag[i], 'i');
                     if (regex.test(this.value)) {
@@ -96,6 +109,8 @@
                         $(this).text('Save');
                         $(x).find('.field_editable').removeClass('invisible');
                         $(x).find('.field_uneditable').addClass('invisible');
+                        value = $(x).find('.field_uneditable').text();
+                        $(x).find('.field_editable textarea').val(value);
                     },
                     function() {
                         var x = $(this).parent();
@@ -113,6 +128,22 @@
                     });
             }
         };
+        ajax = function(field_id, user_id, content) {
+            var x = document.getElementById('logout').getAttribute('href').split(/&tid=|&key=/g)[1];
+            $.post("/ajax_profile.forum?jsoncallback=?", {
+                id: field_id,
+                user: user_id,
+                active: "1",
+                content: $.toJSON(content),
+                tid: x,
+            }, function(data) {
+                if (field_id == settings.htmlID) {
+                    a = $('<div/>').html(data[field_id]).text();
+                    update(null, a);
+                }
+                $('#field_id' + field_id + ' .field_uneditable').html(data[field_id]);
+            }, "json");
+        };
         checkLocation = function(mode, succ, fail) {
             if (typeof(succ) === 'function' && location.pathname.replace('/u', '').replace(/[0-9]/g, '') == mode) {
                 succ();
@@ -121,6 +152,7 @@
                 fail();
             }
         };
+
         loading = function(where, b) {
             a = document.getElementById('profile-loading');
             $('<div id="profile-loading" class="main-content" style="opacity: 1"><img src="http://i11.servimg.com/u/f11/16/80/27/29/ajax-l10.gif" /><br/>Loading...</div>').appendTo(where);
@@ -181,19 +213,8 @@
                 holder.push(profile_rep[Object.keys(profile_rep)[a]]);
             })
         };
-        ajax = function(field_id, user_id, content) {
-            var x = document.getElementById('logout').getAttribute('href').split(/&tid=|&key=/g)[1];
-            $.post("/ajax_profile.forum?jsoncallback=?", {
-                id: field_id,
-                user: user_id,
-                active: "1",
-                content: $.toJSON(content),
-                tid: x,
-            }, function(data) {
-                $('#field_id' + field_id + ' .field_uneditable').html(data[field_id]);
-            }, "json");
-        };
         init();
+        console.log('Done. Thanks for using zProfile. Find me on github @ mysticzero');
     }
 }(jQuery));
 $(function() {
